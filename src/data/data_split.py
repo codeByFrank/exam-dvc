@@ -1,42 +1,68 @@
 import pandas as pd
 import sys
-from sklearn.preprocessing import StandardScaler
-import joblib
+import os
+from sklearn.model_selection import train_test_split
 
-def normalize_data(input_dir, output_dir):
+def split_data(input_path, output_dir):
     """
-    Normalize training and testing data using StandardScaler.
-    Fit scaler on training data only.
+    Split data into training and testing sets.
+    Target variable: silica_concentrate (last column)
     """
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+    
     # Load data
-    X_train = pd.read_csv(f'{input_dir}/X_train.csv')
-    X_test = pd.read_csv(f'{input_dir}/X_test.csv')
+    print(f"Loading data from: {input_path}")
+    df = pd.read_csv(input_path)
     
-    # Initialize and fit scaler on training data
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    print(f"Data loaded. Shape: {df.shape}")
+    print(f"Columns: {df.columns.tolist()}")
     
-    # Convert back to DataFrames
-    X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train.columns)
-    X_test_scaled = pd.DataFrame(X_test_scaled, columns=X_test.columns)
+    # Check if target column exists
+    if 'silica_concentrate' not in df.columns:
+        print(f"ERROR: 'silica_concentrate' column not found!")
+        print(f"Available columns: {df.columns.tolist()}")
+        sys.exit(1)
     
-    # Save normalized data
-    X_train_scaled.to_csv(f'{output_dir}/X_train_scaled.csv', index=False)
-    X_test_scaled.to_csv(f'{output_dir}/X_test_scaled.csv', index=False)
+    # Drop non-numeric columns (like date)
+    columns_to_drop = ['silica_concentrate']
+    if 'date' in df.columns:
+        columns_to_drop.append('date')
+        print("Dropping 'date' column (non-numeric)")
     
-    # Save scaler for later use
-    joblib.dump(scaler, f'{output_dir}/scaler.pkl')
+    # Separate features and target
+    X = df.drop(columns_to_drop, axis=1)
+    y = df['silica_concentrate']
     
-    print(f"Data normalization completed:")
-    print(f"  Features normalized: {len(X_train.columns)}")
-    print(f"  Scaler saved to: {output_dir}/scaler.pkl")
+    print(f"Features used: {X.columns.tolist()}")
+    
+    # Split data: 80% train, 20% test
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+    
+    # Save datasets
+    print(f"Saving datasets to: {output_dir}")
+    X_train.to_csv(f'{output_dir}/X_train.csv', index=False)
+    X_test.to_csv(f'{output_dir}/X_test.csv', index=False)
+    y_train.to_csv(f'{output_dir}/y_train.csv', index=False)
+    y_test.to_csv(f'{output_dir}/y_test.csv', index=False)
+    
+    print(f"Data split completed:")
+    print(f"  Training samples: {len(X_train)}")
+    print(f"  Testing samples: {len(X_test)}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python normalize.py <input_dir> <output_dir>")
+        print("Usage: python data_split.py <input_csv> <output_dir>")
         sys.exit(1)
     
-    input_dir = sys.argv[1]
+    input_path = sys.argv[1]
     output_dir = sys.argv[2]
-    normalize_data(input_dir, output_dir)
+    
+    # Check if input file exists
+    if not os.path.exists(input_path):
+        print(f"ERROR: Input file not found: {input_path}")
+        sys.exit(1)
+    
+    split_data(input_path, output_dir)

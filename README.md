@@ -1,26 +1,20 @@
 # Examen DVC et Dagshub
 
-Dans ce dépôt vous trouverez l'architecture proposé pour mettre en place la solution de l'examen.
+**Name:** Frank Lee
 
-```bash
-├── examen_dvc
-│   ├── data
-│   │   ├── processed
-│   │   └── raw
-│   ├── metrics
-│   ├── models
-│   │   ├── data
-│   │   └── models
-│   ├── src
-│   └── README.md.py
-```
+**Email:** lee.frank.david@gmail.com
 
-N'hésitez pas à rajouter les dossiers ou les fichiers qui vous semblent pertinents.
+**Repository:** https://dagshub.com/codeByFrank/examen_dvc
 
-Vous devez dans un premier temps _Fork_ le repo et puis le cloner pour travailler dessus. Le rendu de cet examen sera le lien vers votre dépôt sur DagsHub. Faites attention à bien mettre https://dagshub.com/licence.pedago en tant que colaborateur avec des droits de lecture seulement pour que ce soit corrigé.
+## Project Overview
 
-Vous pouvez télécharger les données à travers le lien suivant : https://datascientest-mlops.s3.eu-west-1.amazonaws.com/mlops_dvc_fr/raw.csv.
+This project implements a complete DVC pipeline for mineral processing analysis, specifically focusing on the flotation process to predict silica concentration.
 
-dvc stage add -n download ^
--o data/raw/raw.csv ^
-python src/data/download_data.py --url "https://datascientest-mlops.s3.eu-west-1.amazonaws.com/mlops__dvc_fr/raw.csv" --out data/raw/raw.csv
+### Pipeline Stages
+
+1. **download** - Downloads raw data from AWS S3
+2. **data_split** - Splits data into training (80%) and testing (20%) sets
+3. **normalize** - Normalizes features using StandardScaler
+4. **grid_search** - Performs GridSearchCV to find optimal hyperparameters
+5. **train** - Trains RandomForestRegressor with best parameters
+6. **evaluate** - Evaluates model performance and generates metrics
