@@ -1,2 +1,11 @@
 /venv
 /clean_data.csv
+/data
+/models
+/metrics
+*.pkl
+*.csv
+.dvc/tmp
+/dvc.lock
+.dvc/config.local
+.dvc/tmp
