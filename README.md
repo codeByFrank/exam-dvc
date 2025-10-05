@@ -1,10 +1,13 @@
-# Examen DVC et Dagshub
+# Exam DVC with Dagshub
 
 **Name:** Frank Lee
 
 **Email:** lee.frank.david@gmail.com
 
-**Repository:** https://dagshub.com/codeByFrank/examen_dvc
+**Repository:**
+
+- https://dagshub.com/codeByFrank/examen_dvc
+- https://github.com/codeByFrank/exam-dvc
 
 ## Project Overview
 
