@@ -5,7 +5,7 @@
 
 **Repositories:**
 
-- DagsHub: https://dagshub.com/codeByFrank/examen_dvc
+- DagsHub: https://dagshub.com/codeByFrank/exam-dvc
 - GitHub: https://github.com/codeByFrank/exam-dvc
 
 ---
